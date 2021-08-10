@@ -8,15 +8,16 @@ class App extends React.Component {
  
   state = {
     products: jsondata.data,
+    showAll: true,
   };
 
 showProducts = () => {
-  return this.state.products.map(each => {
+  return this.state.products.map(eachProduct => {
     return(
-      <li>
-        {each.name} - {each.price} - {each.category}
-      </li>
-      
+      <li hidden={this.state.showAll && !eachProduct.stocked}>
+       <span className={!eachProduct.stocked && "notInStock"}> {eachProduct.name} </span> 
+        - {eachProduct.price} - {eachProduct.category} 
+        </li>
     );
   });
 };
@@ -28,21 +29,20 @@ search = (e) => {
   });
   this.setState ({products: filteredProduct});
 };
-
  
-  render(){
-
+render(){
+   console.log(this.state)
   return (
     <div className="App">
-      <input
-       name="search" 
-       type="text"
-       placeholder="search"
-       onChange={this.search}/>
+      <input name="search" type="text" placeholder="search" onChange={this.search}></input>
+      <input name="showInStockOnly" 
+      type="checkBox" 
+      checked={this.state.showAll} 
+      onChange={() => this.setState({showAll: !this.state.showAll})}></input>
+      <label>Only show products on Stock</label>
       {this.showProducts()}
     </div>
   );
-
   }
   
 }
